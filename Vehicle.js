@@ -39,7 +39,7 @@ AutonomousVehicle.prototype.init = function(){
 }
 
 AutonomousVehicle.prototype.updateGenome = function(genome){
-        // this.Genome = genome;
+      //this.Genome = genome;
       for (var i = 1 ; i < 10; i++) {
           for (var j = 1; j < 13; j++) {
             this.Genome[i][j] = genome[i][j];

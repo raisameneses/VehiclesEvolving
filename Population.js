@@ -25,31 +25,38 @@ var Population = function (game, light) {
       
   }
 
-  Population.prototype.update = function(){  
-    var fitness_results = []  //Array to store the vehicles after driving for 10 seconds     
+  Population.prototype.update = function(){     
     if(this.generation < 20){       
     this.elapsedTime += this.game.clockTick;     
           if (this.elapsedTime > this.totalTime){  
-            fitness_results[this.currentCar] = this.population[this.currentCar]
-            this.current_car_fitness = fitness_results[this.currentCar].fitness          
+            this.current_car_fitness = this.population[this.currentCar].fitness          
             this.game.entities[2].removeFromWorld = true; 
-            console.log("Removed: " + this.currentCar)
             this.currentCar++    
             if(this.currentCar <= this.populationSize){                
               this.game.addEntity(this.population[this.currentCar])   
             }
             this.elapsedTime = 0;
         }
-         if(this.currentCar > this.populationSize){
+         else if(this.currentCar > this.populationSize){
+            var newGenome = this.crossover(this.population) //Crossover
+            for(var j = 1; j < this.crossover.length; j++){ //Mutate             
+              var mutate = Math.random()              
+              if(mutate < 0.5) {
+                this.mutate(newGenome[j])
+              }
+            }  
+            //Update Genome  
+            for(var i = 1; i < this.populationSize; i++){
+              var random = Math.floor(Math.random() * (newGenome.length - 1)) + 1;
+              this.population[i].updateGenome(newGenome[random])
+            } 
+            //Next round
             this.generation++            
-            this.currentCar =  1; 
-            // this.game.addEntity(this.population[this.currentCar])  
-            // console.log(this.game.entities[2]) 
-            // console.log(this.game.entities[2].removeFromWorld)  
-             
+            this.currentCar =  1;     
         } 
     } 
  } 
+
 
   Population.prototype.draw = function(){
     this.game.ctx.font = "bold 20px Arial";
@@ -60,11 +67,13 @@ var Population = function (game, light) {
     this.game.ctx.fillText("Fitness       : " + this.current_car_fitness,400,110);
   }
 
-  //TODO
+  
 Population.prototype.mutate = function(weights){
-      for (var m = 1; m < weights.length; m ++) {
-            weights[m] +=  Math.random();
-      }
+      for (var i = 1 ; i <  weights.length; i++) {
+        for (var j = 1; j < 13; j++) {
+          weights[i][j] +=  Math.random();
+        }
+    }
   }
   function mySorter(a, b){
     return a.fitness - b.fitness; 
@@ -72,14 +81,14 @@ Population.prototype.mutate = function(weights){
 
   //returns an array contining the genome 
   //that will be used for the next generation
-  Population.prototype.crossover_n_mutation = function(currentPopulation){
+  Population.prototype.crossover = function(currentPopulation){
     best = currentPopulation
     best.sort(mySorter);  //Array of vehicles
     var crossed_genome = []; //used to hold genome for crossover
     var mother = []
     var father = []
    //Cross over the best genome
-    for(var p = 1; p < this.poolLength; p++){
+    for(var p = 1; p <= this.poolLength; p++){
       var randomParent = Math.floor(Math.random() * (this.poolLength)) + 1;
       mother[p] = best[randomParent].Genome
       randomParent = Math.floor(Math.random() * (this.poolLength)) + 1;    
