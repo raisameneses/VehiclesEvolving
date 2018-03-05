@@ -1,12 +1,13 @@
 var Population = function (game, light) {
     this.game = game;
     this.light_source = light;
-    this.populationSize = 20; 
+    this.populationSize = 100; 
+    this.lifeCycle = 100;
     this.mutationRate = (5/100) * this.populationSize; ;   
     this.poolLength = (50/100) * this.populationSize; 
     this.generation = 0;
     this.population;
-    this.totalTime = 2; 
+    this.totalTime = 10; 
     this.elapsedTime = 0;
     this.currentCar = 1;
     this.current_car_fitness = 0;   
@@ -21,12 +22,13 @@ var Population = function (game, light) {
       for(let j = 1; j <= this.populationSize; j++){
           this.population[j].init();   
           this.game.addEntity(this.population[this.currentCar])
-        }          
+        }           
+        //this.game.addEntity(this.population[1])        
       
   }
 
   Population.prototype.update = function(){     
-    if(this.generation < 20){       
+    if(this.generation < this.lifeCycle){       
     this.elapsedTime += this.game.clockTick;     
           if (this.elapsedTime > this.totalTime){  
             this.current_car_fitness = this.population[this.currentCar].fitness          
@@ -37,18 +39,36 @@ var Population = function (game, light) {
             }
             this.elapsedTime = 0;
         }
-         else if(this.currentCar > this.populationSize){
+         else if(this.currentCar == this.populationSize){
+           
+          this.current_car_fitness = this.population[this.currentCar].fitness 
+           //Let's select the best genomes to pass down to the new generation
             var newGenome = this.crossover(this.population) //Crossover
-            for(var j = 1; j < this.crossover.length; j++){ //Mutate             
-              var mutate = Math.random()              
-              if(mutate < 0.5) {
+            for(var j = 1; j < newGenome.length; j++){ //Mutate             
+              var mutate = Math.random()   
+              //  && this.generation > (this.lifeCycle / 15)
+              // && this.generation > (this.lifeCycle / 15)
+              console.log(mutate && this.generation > (this.lifeCycle / 12))        
+              if(mutate < 0.5 ) {
+                console.log("I mutated!!!!")
                 this.mutate(newGenome[j])
               }
             }  
-            //Update Genome  
-            for(var i = 1; i < this.populationSize; i++){
-              var random = Math.floor(Math.random() * (newGenome.length - 1)) + 1;
-              this.population[i].updateGenome(newGenome[random])
+            //Create new generation of vehicles
+            for(let newGeneration = 1; newGeneration <= this.populationSize; newGeneration++){
+              this.population[newGeneration] = new AutonomousVehicle(this.game, this.light_source); 
+            }          
+            for(var i = 1; i <= this.populationSize; i++){
+              this.population[i].initNoWeights()
+            } 
+            //Give the vehicles a new genome 
+            for(var i = 1; i <= this.populationSize; i++){
+              var random = Math.floor(Math.random() * (newGenome.length - 1)) + 1;  
+              this.population[i].updateGenome(newGenome[random]) 
+            } 
+            // console.log(this.generation)
+            for(var i = 1; i <= this.populationSize; i++){
+              console.log(this.population[i].Genome)
             } 
             //Next round
             this.generation++            
@@ -64,7 +84,7 @@ var Population = function (game, light) {
     this.game.ctx.fillText("Elapsed Time  :   " + this.elapsedTime,400,50);
     this.game.ctx.fillText("Vehicle Number: " + this.currentCar,400,70);
     this.game.ctx.fillText("Generation    : " + this.generation,400,90);
-    this.game.ctx.fillText("Fitness       : " + this.current_car_fitness,400,110);
+    this.game.ctx.fillText("Prev Fitness: " + this.current_car_fitness,400,110);
   }
 
   

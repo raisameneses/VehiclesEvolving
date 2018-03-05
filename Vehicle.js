@@ -20,12 +20,11 @@ var AutonomousVehicle = function (game, light) {
     this.sensors = this.initSensors(); 
     this.sensor_brightness =  this.detectBrightness(); 
     this.Genome;
-    //this.init();
     this.direction = this.anglePosition(this.angle); 
     this.acceleration = .5;
     this.angularAcceleration = .5;  
 
-    this.fitness; 
+    this.fitness = 0; 
   }  
 
 AutonomousVehicle.prototype.init = function(){
@@ -38,11 +37,23 @@ AutonomousVehicle.prototype.init = function(){
   }
 }
 
+AutonomousVehicle.prototype.initNoWeights = function(){
+  this.Genome = [];
+  for (var i = 1 ; i < 10; i++) {
+      this.Genome[i] = [];
+      for (var j = 1; j < 13; j++) {
+          this.Genome[i][j] =  0;
+      }
+  }
+}
+
 AutonomousVehicle.prototype.updateGenome = function(genome){
       //this.Genome = genome;
+      var weights = [];
+      weights = genome; 
       for (var i = 1 ; i < 10; i++) {
           for (var j = 1; j < 13; j++) {
-            this.Genome[i][j] = genome[i][j];
+            this.Genome[i][j] = weights[i][j];
           }
       }
 }
