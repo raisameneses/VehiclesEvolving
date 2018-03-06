@@ -41,9 +41,11 @@ var Population = function (game, light) {
           this.current_car_fitness = this.population[this.currentCar].fitness 
            //Let's select the best genomes to pass down to the new generation
             var newGenome = this.crossover(this.population) //Crossover
+            console.log("New Genome length: ")
+            console.log(newGenome.length)
             for(var j = 1; j < newGenome.length; j++){ //Mutate             
                 var mutate = Math.random()            
-                if(mutate > 0.2) {
+                if(mutate > 0.5) {
                   console.log("I mutated!!!!")
                   this.mutate(newGenome[j])
                 }
@@ -62,13 +64,13 @@ var Population = function (game, light) {
               this.population[p].updateGenome(newGenome[random]) 
             }
              //Next round
-             this.generation++  
-            // console.log(this.generation)
-            // for(var i = 1; i <= this.populationSize; i++){
-            //   console.log(this.population[i].Genome)
-            // } 
-                      
-            this.currentCar =  1;     
+             this.generation++                         
+             this.currentCar =  1;  
+            console.log(this.generation)
+            for(var i = 1; i <= this.populationSize; i++){
+              console.log(this.population[i].Genome)
+            } 
+               
         } 
     } 
  } 
@@ -85,9 +87,9 @@ var Population = function (game, light) {
 
   
 Population.prototype.mutate = function(weights){
-      for (var i = 1 ; i <  weights.length; i++) {
+      for (var i = 1 ; i <  10; i++) {
         for (var j = 1; j < 13; j++) {
-          weights[i][j] +=  Math.floor(Math.random() * (5)) + 1;
+          weights[i][j] += Math.random();
         }
     }
   }
@@ -114,14 +116,27 @@ Population.prototype.mutate = function(weights){
     for(var p = 1; p <= poolLimit; p++){
       randomMother = Math.floor(Math.random() * (poolLimit)) + 1;      
       randomFather = Math.floor(Math.random() * (poolLimit)) + 1;
-      mother[p] = currentPopulation[randomMother].Genome    
+      console.log("Mother's fitness")
+      console.log(currentPopulation[randomMother].fitness)
+      mother[p] = currentPopulation[randomMother].Genome 
+      console.log("Father's fitness")
+      console.log(currentPopulation[randomFather].fitness)   
       father[p] = currentPopulation[randomFather].Genome
       var mother_or_father =  Math.round(Math.random());
+      for(var i = 1; i < 10; i++){
           if(mother_or_father == 0){
             crossed_genome[p] = father[p]; 
-          }          
-      crossed_genome[p] = mother[p];           
-  }
+          } else{
+            crossed_genome[p] = mother[p];
+          }     
+       }         
+     }
+    //  console.log("crossover pool")
+    //  for(var i = 1; i < crossed_genome.length; i++){
+    //    console.log(crossed_genome[i])
+    //  } 
+        
+
     return crossed_genome
 }
 
