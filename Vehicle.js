@@ -98,13 +98,17 @@ AutonomousVehicle.prototype.updateGenome = function(genome){
     var force;
     var rightWheel = wheels[1]; 
     var leftWheel = wheels[2]; 
+    // console.log("right wheel")
+    // console.log(rightWheel)
+    // console.log("left wheel")
+    // console.log(leftWheel)
     if(rightWheel > leftWheel){
         force = (rightWheel * this.acceleration);
     } else {
         force = (leftWheel  * this.acceleration);
     }
-   
-    var torque = (rightWheel -  leftWheel * this.angularAcceleration); 
+   //* this.angularAcceleration
+    var torque = (rightWheel -  leftWheel ); 
     this.angle += torque;
     this.direction = this.anglePosition(this.angle);
 
@@ -117,6 +121,10 @@ AutonomousVehicle.prototype.updateGenome = function(genome){
 
     this.sensors = this.initSensors(); 
     this.sensor_brightness =  this.detectBrightness(); 
+    // console.log(this.position.center)
+    // for(var i = 1; i < this.sensor_brightness.length; i++){
+    //   console.log(this.sensor_brightness[i])
+    // }
   }
   
   AutonomousVehicle.prototype.draw = function () {  
