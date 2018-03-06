@@ -1,9 +1,9 @@
 var Population = function (game, light) {
     this.game = game;
     this.light_source = light;
-    this.populationSize = 30; 
+    this.populationSize = 15; 
     this.lifeCycle = 100;    
-    this.poolLength = (10/100) * this.populationSize; //10%
+    this.poolLength = (30/100) * this.populationSize; //10%
     this.generation = 0;
     this.population =[];
     this.totalTime = 10; 
@@ -41,28 +41,25 @@ var Population = function (game, light) {
           this.current_car_fitness = this.population[this.currentCar].fitness 
            //Let's select the best genomes to pass down to the new generation
             var newGenome = this.crossover(this.population) //Crossover
-            console.log("New genome:")
-            console.log(newGenome.length)
             for(var j = 1; j < newGenome.length; j++){ //Mutate             
-              var mutate = Math.random() 
-              console.log("Mutate: ")
-              console.log(mutate)                    
-              if(mutate > 0.2) {
-                console.log("I mutated!!!!")
-                this.mutate(newGenome[j])
-              }
+                var mutate = Math.random()            
+                if(mutate > 0.2) {
+                  console.log("I mutated!!!!")
+                  this.mutate(newGenome[j])
+                }
             }  
             //Create new generation of vehicles
             for(let newGeneration = 1; newGeneration <= this.populationSize; newGeneration++){
               this.population[newGeneration] = new AutonomousVehicle(this.game, this.light_source); 
-            }          
+            }  
+            //Initialize the Genome         
             for(var i = 1; i <= this.populationSize; i++){
               this.population[i].initNoWeights()
             } 
             //Give the vehicles a new genome 
-            for(var i = 1; i <= this.populationSize; i++){
+            for(var p = 1; p <= this.populationSize; p++){
               var random = Math.floor(Math.random() * (newGenome.length - 1)) + 1;  
-              this.population[i].updateGenome(newGenome[random]) 
+              this.population[p].updateGenome(newGenome[random]) 
             }
              //Next round
              this.generation++  
@@ -102,27 +99,23 @@ Population.prototype.mutate = function(weights){
   //returns an array contining the genome 
   //that will be used for the next generation
   Population.prototype.crossover = function(currentPopulation){
+    var randomMother
+    var randomFather
     currentPopulation.sort(mySorter);  //Array of vehicles
-    console.log("Original")
+    //FOR DEBUGGING 
     for(var p = 1; p < currentPopulation.length - 1; p++){
       console.log(currentPopulation[p].fitness)
     }
-
-    for(var p = 1; p < currentPopulation.length - 1; p++){
-      if(currentPopulation[p].fitness < 2){
-        this.mutate(currentPopulation[p])
-      }
-    }
-   
     var crossed_genome = []; //used to hold genome for crossover
     var mother = []
     var father = []
-   //Cross over the best genome
-    for(var p = 1; p <= this.poolLength; p++){
-      var randomParent = Math.floor(Math.random() * (this.poolLength)) + 1;
-      mother[p] = currentPopulation[randomParent].Genome
-      randomParent = Math.floor(Math.random() * (this.poolLength)) + 1;    
-      father[p] = currentPopulation[randomParent].Genome
+    var poolLimit = Math.floor(this.poolLength)
+   //Mix up mother and father genome from the best genome pool
+    for(var p = 1; p <= poolLimit; p++){
+      randomMother = Math.floor(Math.random() * (poolLimit)) + 1;      
+      randomFather = Math.floor(Math.random() * (poolLimit)) + 1;
+      mother[p] = currentPopulation[randomMother].Genome    
+      father[p] = currentPopulation[randomFather].Genome
       var mother_or_father =  Math.round(Math.random());
           if(mother_or_father == 0){
             crossed_genome[p] = father[p]; 
