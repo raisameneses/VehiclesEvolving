@@ -69,7 +69,7 @@ AutonomousVehicle.prototype.updateGenome = function(genome){
     var sensor = [];
     for(var i = 1; i < 13; i++){
         var sensorAngle = ((Math.PI * i) / 6);
-        sensor[i] = (this.anglePosition(sensorAngle));
+        sensor[i] = (this.anglePosition(sensorAngle + this.angle));
     }
     return sensor;
   }
@@ -77,7 +77,7 @@ AutonomousVehicle.prototype.updateGenome = function(genome){
     var brightness = [];
     for(var i = 1; i < 13; i++){ 
         var sensorDistance = this.sensors[i].distance(this.lightSource.lightLocation)        
-        brightness[i] = this.lightSource.luminosity / Math.pow(sensorDistance, 2); 
+        brightness[i] = (this.lightSource.luminosity / Math.pow(sensorDistance, 2)) *100; 
     }
 
     return brightness;
@@ -93,6 +93,7 @@ AutonomousVehicle.prototype.updateGenome = function(genome){
   //Is this updating I don't think so?? 
   AutonomousVehicle.prototype.update = function () { 
     //this.init();
+   
     var neuralN = new NeuralNetwork(this.sensor_brightness, this.Genome)
     var wheels = neuralN.feedforward();
     var force;
@@ -118,9 +119,10 @@ AutonomousVehicle.prototype.updateGenome = function(genome){
     this.position.center.vectorX += dX ;
     this.position.center.vectorY += dY;
     this.fitness = this.fitnessFunction() 
-
     this.sensors = this.initSensors(); 
     this.sensor_brightness =  this.detectBrightness(); 
+
+   
     // console.log(this.position.center)
     // for(var i = 1; i < this.sensor_brightness.length; i++){
     //   console.log(this.sensor_brightness[i])
