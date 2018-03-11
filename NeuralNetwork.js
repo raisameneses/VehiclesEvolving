@@ -18,14 +18,7 @@ const num_output = 3;
         for(var hid_out = 1; hid_out < num_hidden; hid_out++){  
             hidden_output[hid_out] =  hiddenLayer[hid_out].output; 
         }
-      
-        //Array for output layer output layer: 
-        //
-        // console.log("Array of hidden size:")
-        // console.log(hidden_output.length)
-        // for(var i = 1; i < hidden_output.length; i++){
-        //     console.log(hidden_output[i])
-        // }
+             
         var outputLayer = [];
         var wheels = [];
         var gene  = 7; 
@@ -37,12 +30,7 @@ const num_output = 3;
         for(var activate = 1; activate < num_output; activate++){
             wheels[activate] = outputLayer[activate].output;
         }     
-        
-        // console.log("wheels:")
-        // console.log(wheels.length)
-        // for(var i = 1; i < wheels.length; i++){
-        //     console.log(wheels[i])
-        // }
+      
         return wheels; 
   }
 

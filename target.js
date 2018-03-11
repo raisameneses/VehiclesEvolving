@@ -16,6 +16,5 @@ var LightSource = function(game){
   }
   
   LightSource.prototype.update = function() {
-   //Do nothing, values are stable. 
   }
   

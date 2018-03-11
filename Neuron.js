@@ -8,8 +8,7 @@ var Neuron = function (input, weight){
     this.output = this.Sigmoid(this.multiply);
 }
 
-//Light is giving "Not a number back for some isntances.. why?"
-//Genome has some "undefined too. Must be the way I'm passing it to the Neural Network"
+
 Neuron.prototype.Multiply_matrix = function(){
     var add_matrix = 0;
     for(var i = 1; i < this.input.length; i++){

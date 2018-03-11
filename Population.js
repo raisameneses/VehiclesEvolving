@@ -59,9 +59,6 @@ var Population = function (game, light) {
              //Retain the best performing vehicles
              for(var b = 1; b < 5; b++){
               var random = Math.floor(Math.random() * (4)) + 1;  
-              // console.log(b)
-              // console.log(bestGenome[b])
-              // console.log(this.population[b])
               this.population[b].updateGenome(bestGenome[b].Genome) 
             }
             //Give the rest of the vehicles a new genome based on crossover
@@ -122,11 +119,7 @@ Population.prototype.mutate = function(weights){
   Population.prototype.crossover = function(currentPopulation){
     var randomMother
     var randomFather
-    currentPopulation.sort(mySorter);  //Array of vehicles
-    //FOR DEBUGGING 
-    for(var p = 1; p < currentPopulation.length - 1; p++){
-      console.log(currentPopulation[p].fitness)
-    }
+    currentPopulation.sort(mySorter);  //Array of vehicles   
     var crossed_genome = []; //used to hold genome for crossover
     var mother = []
     var father = []
@@ -135,11 +128,7 @@ Population.prototype.mutate = function(weights){
     for(var p = 1; p <= poolLimit; p++){
       randomMother = Math.floor(Math.random() * (poolLimit)) + 1;      
       randomFather = Math.floor(Math.random() * (poolLimit)) + 1;
-      console.log("Mother's fitness")
-      console.log(currentPopulation[randomMother].fitness)
-      mother[p] = currentPopulation[randomMother].Genome 
-      console.log("Father's fitness")
-      console.log(currentPopulation[randomFather].fitness)   
+      mother[p] = currentPopulation[randomMother].Genome    
       father[p] = currentPopulation[randomFather].Genome
       var mother_or_father =  Math.round(Math.random());
       for(var i = 1; i < 10; i++){

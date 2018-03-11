@@ -3,7 +3,7 @@ function randomInt(n) {
     return Math.floor(Math.random() * n);
 }
 /***********************************************************************
- * Vector -- Helper to build Vehicle's phenotype
+ * Vector -- Helper to build Vehicle's phenotype ****
  **********************************************************************/
 var Vector = function (x, y) {
     this.vectorX = x,

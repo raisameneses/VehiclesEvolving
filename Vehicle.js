@@ -99,10 +99,7 @@ AutonomousVehicle.prototype.updateGenome = function(genome){
     var force;
     var rightWheel = wheels[1]; 
     var leftWheel = wheels[2]; 
-    // console.log("right wheel")
-    // console.log(rightWheel)
-    // console.log("left wheel")
-    // console.log(leftWheel)
+
     if(rightWheel > leftWheel){
         force = (rightWheel * this.acceleration);
     } else {
@@ -122,11 +119,6 @@ AutonomousVehicle.prototype.updateGenome = function(genome){
     this.sensors = this.initSensors(); 
     this.sensor_brightness =  this.detectBrightness(); 
 
-   
-    // console.log(this.position.center)
-    // for(var i = 1; i < this.sensor_brightness.length; i++){
-    //   console.log(this.sensor_brightness[i])
-    // }
   }
   
   AutonomousVehicle.prototype.draw = function () {  
@@ -144,6 +136,7 @@ AutonomousVehicle.prototype.updateGenome = function(genome){
     this.ctx.fill();
   }
 
+  //Use to see only one vehicle driving with no evolution
 //############.....M  A  I  N.....#################
 
 // var ASSET_MANAGER = new AssetManager();
